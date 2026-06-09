@@ -25,10 +25,10 @@ function love.load()
         "Pipe bomb! So cool! I wonder what happens if I-"
     }
     temp_randi = math.random(1, #temp_rando)
+    love.window.setTitle("Blastbunny: " .. temp_rando[temp_randi])
 end
 
 
 function love.draw()
-    love.graphics.print(temp_rando[temp_randi], 100, 100)
     visual_draw()
 end
