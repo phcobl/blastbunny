@@ -1,30 +1,55 @@
-function visual_init()
-    tile_image = love.graphics.newImage("tile.png")
-    tile_frames = {}
-    tile_frames["normal"] = love.graphics.newQuad(0, 0, 8, 8, tile_image:getWidth(), tile_image:getHeight())
-    tile_frames["revealed"] = love.graphics.newQuad(8, 0, 8, 8, tile_image:getWidth(), tile_image:getHeight())
+function visualInit()
+    tileImage = love.graphics.newImage("tile.png")
+    tileImage:setFilter("linear", "nearest")
+    tileFrames = {}
+    tileFrames["normal"] = love.graphics.newQuad(0, 0, 8, 8, tileImage:getWidth(), tileImage:getHeight())
+    tileFrames["revealed"] = love.graphics.newQuad(8, 0, 8, 8, tileImage:getWidth(), tileImage:getHeight())
 
-    decal_image = love.graphics.newImage("decal.png")
-    decal_frames = {}
+    decalImage = love.graphics.newImage("decal.png")
+    decalImage:setFilter("linear", "nearest")
+    decalFrames = {}
     for i=1, 10 do
-        decal_frames[i] = love.graphics.newQuad((i-1)*8, 0, 8, 8, decal_image:getWidth(), decal_image:getHeight())
+        decalFrames[i] = love.graphics.newQuad((i-1)*8, 0, 8, 8, decalImage:getWidth(), decalImage:getHeight())
     end
+
+    canvas = love.graphics.newCanvas(game_sizex*8, game_sizey*8)
+    canvas:setFilter("linear", "nearest")
+
+    visual_pixelScale = 2
 end
 
-function visual_draw()
-    for x = 1, #map do
-        for y = 1, #map[x] do
-            local current_tile = map[x][y]
-            if map[x][y].is_revealed then
-                love.graphics.draw(tile_image, tile_frames.revealed, x*8, y*8)
-                if current_tile.has_mine then
-                    love.graphics.draw(decal_image, decal_frames[10], x*8, y*8)
-                elseif current_tile.mined_neighbours > 0 then
-                    love.graphics.draw(decal_image, decal_frames[current_tile.mined_neighbours], x*8, y*8)
+function visualDraw()
+    love.graphics.draw(canvas, 0, 0, 0, visual_pixelScale, visual_pixelScale)
+end
+
+function canvasDraw()
+    love.graphics.setCanvas(canvas)
+        love.graphics.clear(0, 0, 0)
+        for x = 1, game_sizex do
+            for y = 1, game_sizey do
+                local currentTile = map[x][y]
+                if map[x][y].isRevealed then
+                    love.graphics.draw(tileImage, tileFrames.revealed, x*8-8, y*8-8)
+                    if currentTile.hasMine then
+                        love.graphics.draw(decalImage, decalFrames[10], x*8-8, y*8-8)
+                    elseif currentTile.minedNeighbours > 0 then
+                        love.graphics.draw(decalImage, decalFrames[current_tile.minedNeighbours], x*8-8, y*8-8)
+                    end
+                else
+                    love.graphics.draw(tileImage, tileFrames.normal, x*8-8, y*8-8)
                 end
-            else
-                love.graphics.draw(tile_image, tile_frames.normal, x*8, y*8)
             end
         end
-    end
+    love.graphics.setCanvas()
+end
+
+function canvasReset()
+    love.graphics.setCanvas(canvas)
+        love.graphics.clear(0, 0, 0)
+        for x = 1, game_sizex do
+            for y = 1, game_sizey do
+                love.graphics.draw(tileImage, tileFrames.normal, x*8-8, y*8-8)
+            end
+        end
+    love.graphics.setCanvas()
 end

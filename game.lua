@@ -1,13 +1,19 @@
-solve_attempts = 0
-max_solve_attempts = 50
+solveAttempts = 0
+maxSolveAttempts = 50
 
+function gameInit(x, y, m)
+    game_sizex = x
+    game_sizey = y
+    game_mines = m
+    --game_state = "init"
+end
 
-function generate_map(sizex, sizey, number_of_mines, start_tile_coords)
+function generateMap(startTileCoords)
     -- step 1: generate field
     map = {}
-    for x = 1, sizex do
-        map [x] = {}
-        for y = 1, sizey do
+    for x = 1, game_sizex do
+        map[x] = {}
+        for y = 1, game_sizey do
             --print("Creating new tile at: ", x, ", ", y)
             map[x][y] = Tile({x, y}, false)
         end
@@ -16,34 +22,34 @@ function generate_map(sizex, sizey, number_of_mines, start_tile_coords)
     -- step 2: fill field with mines
     local attempt = 0
     local i = 0
-    --print("max fields: ", sizex * sizey)
-    --print("max attempts: ", sizex * sizey * 10)
-    while i < number_of_mines do
-        if attempt < sizex * sizey * 10 then
-            local rx = math.random(1, sizex)
-            local ry = math.random(1, sizey)
+    --print("max fields: ", game_sizex * game_sizey)
+    --print("max attempts: ", game_sizex * game_sizey * 10)
+    while i < game_mines do
+        if attempt < game_sizex * game_sizey * 10 then
+            local rx = love.math.random(1, game_sizex)
+            local ry = love.math.random(1, game_sizey)
             local tile = map[rx][ry]
             --print("Generating Mine #", i, ". Attempt #", attempt)
-            if tile.has_mine or (rx == start_tile_coords[1] and ry == start_tile_coords[2]) then
+            if tile.hasMine or (rx == startTileCoords[1] and ry == startTileCoords[2]) then
                 attempt = attempt + 1
                 --print("new attempt")
             else
-                tile.has_mine = true
-                add_mine_to_neighbours({rx, ry})
+                tile.hasMine = true
+                addMineToNeighbours({rx, ry})
                 i = i + 1
             end
         else
             print("I tried so hard and got so far. But in the end I fucked up the minefield generator. ~Freddy")
-            i = number_of_mines
+            i = game_mines
         end
     end
     
 
-    if solve_attempts < max_solve_attempts then
-        if not is_map_solveable(start_tile_coords) then
-            solve_attempts = solve_attempts + 1
+    if solveAttempts < maxSolveAttempts then
+        if not isMapSolveable(startTileCoords) then
+            solveAttempts = solveAttempts + 1
             print("Can't solve map. Trying again.")
-            generate_map(sizex, sizey, number_of_mines, start_tile_coords)
+            generateMap(startTileCoords)
             return
         end
     else
@@ -51,34 +57,34 @@ function generate_map(sizex, sizey, number_of_mines, start_tile_coords)
         return
     end
 
-    debug_draw_minefield()
+    debugDrawMinefield()
     io.write("\n")
-    debug_draw_neighbours()
+    debugDrawNeighbours()
     io.write("\n")
-    debug_draw_revealed()
+    debugDrawRevealed()
 end
 
 
-function add_mine_to_neighbours(mine_coord)
-    local neighbour_coords_array = get_neighbour_coords(mine_coord)
-    for i = 1, #neighbour_coords_array do
-        local neighbour_tile = map[neighbour_coords_array[i][1]][neighbour_coords_array[i][2]]
-        neighbour_tile.mined_neighbours = neighbour_tile.mined_neighbours + 1
+function addMineToNeighbours(mineCoord)
+    local neighbourCoordsArray = getNeighbourCoords(mineCoord)
+    for i = 1, #neighbourCoordsArray do
+        local neighbourTile = map[neighbourCoordsArray[i][1]][neighbourCoordsArray[i][2]]
+        neighbourTile.minedNeighbours = neighbourTile.minedNeighbours + 1
     end
 end
 
 
-function reveal_tile(coord)
+function revealTile(coord)
     local tile = map[coord[1]][coord[2]]
-    tile.is_revealed = true
+    tile.isRevealed = true
 
-    if tile.mined_neighbours == 0 then
-        local neighbour_coords_array = get_neighbour_coords({coord[1], coord[2]})
-        for i = 1, #neighbour_coords_array do
-            local neighbour_tile = map[neighbour_coords_array[i][1]][neighbour_coords_array[i][2]]
-            if neighbour_tile.has_mine == false then
-                if neighbour_tile.is_revealed == false then
-                    reveal_tile({neighbour_coords_array[i][1], neighbour_coords_array[i][2]})
+    if tile.minedNeighbours == 0 then
+        local neighbourCoordsArray = getNeighbourCoords({coord[1], coord[2]})
+        for i = 1, #neighbourCoordsArray do
+            local neighbourTile = map[neighbourCoordsArray[i][1]][neighbourCoordsArray[i][2]]
+            if neighbourTile.hasMine == false then
+                if neighbourTile.isRevealed == false then
+                    revealTile({neighbourCoordsArray[i][1], neighbourCoordsArray[i][2]})
                 end
             end
         end
@@ -86,7 +92,7 @@ function reveal_tile(coord)
 end
 
 
-function get_neighbour_coords(coord)
+function getNeighbourCoords(coord)
     local neighbours = {}
     for x = -1, 1 do
         for y = -1, 1 do
@@ -104,24 +110,24 @@ end
 
 
 -- Unused. Implement this later maybe.
-function is_map_solveable(start_coord)
+function isMapSolveable(startCoord)
     return true
 end
 
 
 -- Maybe useful for is_map_solveable
-function is_tile_solveable(tile_coords)
-    local neighbours = get_neighbour_coords(tile_coords)
+function isTileSolveable(tileCoords)
+    local neighbours = getNeighbourCoords(tileCoords)
 end
 
 
 -- Debug Draw
 
 
-function debug_draw_minefield()
+function debugDrawMinefield()
     for x = 1, #map do
         for y = 1, #map[1] do
-            if map[x][y].has_mine then
+            if map[x][y].hasMine then
                 io.write(" X ")
             else
                 io.write(" O ")
@@ -132,13 +138,13 @@ function debug_draw_minefield()
 end
 
 
-function debug_draw_neighbours()
+function debugDrawNeighbours()
     for x = 1, #map do
         for y = 1, #map[1] do
-            if map[x][y].has_mine then
+            if map[x][y].hasMine then
                 io.write(" X ")
             else
-                io.write(" ", map[x][y].mined_neighbours , " ")
+                io.write(" ", map[x][y].minedNeighbours , " ")
             end
         end
         io.write("\n")
@@ -147,11 +153,11 @@ function debug_draw_neighbours()
 end
 
 
-function debug_draw_revealed()
+function debugDrawRevealed()
     for x = 1, #map do
         for y = 1, #map[1] do
-            local neighbours = map[x][y].mined_neighbours
-            if map[x][y].is_revealed then
+            local neighbours = map[x][y].minedNeighbours
+            if map[x][y].isRevealed then
                 io.write(" ", neighbours," ")
             else
                 io.write(" - ")
@@ -159,9 +165,4 @@ function debug_draw_revealed()
         end
         io.write("\n")
     end
-end
-
--- ####################################################################################
-
-function draw_map()
 end
