@@ -4,9 +4,12 @@ function love.load()
     Object = require "classic"
     require "game"
     require "tile"
+    require "visual"
 
-    generate_map(20, 20, 50, {1,1})
+    generate_map(10, 10, 10, {1,1})
     reveal_tile({1,1})
+
+    visual_init()
 
     temp_rando = {
         "Waffles?",
@@ -27,4 +30,5 @@ end
 
 function love.draw()
     love.graphics.print(temp_rando[temp_randi], 100, 100)
+    visual_draw()
 end
