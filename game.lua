@@ -15,14 +15,14 @@ function generate_map(sizex, sizey, number_of_mines, start_tile_coords)
 
     -- step 2: fill field with mines
     local attempt = 0
-    i = 0
+    local i = 0
     --print("max fields: ", sizex * sizey)
     --print("max attempts: ", sizex * sizey * 10)
     while i < number_of_mines do
         if attempt < sizex * sizey * 10 then
-            rx = math.random(1, sizex)
-            ry = math.random(1, sizey)
-            tile = map[rx][ry]
+            local rx = math.random(1, sizex)
+            local ry = math.random(1, sizey)
+            local tile = map[rx][ry]
             --print("Generating Mine #", i, ". Attempt #", attempt)
             if tile.has_mine or (rx == start_tile_coords[1] and ry == start_tile_coords[2]) then
                 attempt = attempt + 1
