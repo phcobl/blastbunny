@@ -1,12 +1,14 @@
 solveAttempts = 0
 maxSolveAttempts = 50
 
+
 function gameInit(x, y, m)
     game_sizex = x
     game_sizey = y
     game_mines = m
     --game_state = "init"
 end
+
 
 function generateMap(startTileCoords)
     -- step 1: generate field
@@ -44,7 +46,8 @@ function generateMap(startTileCoords)
         end
     end
     
-
+    -- step 3: check if map can be solved
+    -- Not working yet, implement isMapSolveable to get it working
     if solveAttempts < maxSolveAttempts then
         if not isMapSolveable(startTileCoords) then
             solveAttempts = solveAttempts + 1
@@ -57,11 +60,9 @@ function generateMap(startTileCoords)
         return
     end
 
-    debugDrawMinefield()
-    io.write("\n")
-    debugDrawNeighbours()
-    io.write("\n")
-    debugDrawRevealed()
+    -- step 4: reveal first tile
+    revealTile(startTileCoords)
+    --debugDrawStuff()
 end
 
 
@@ -122,6 +123,15 @@ end
 
 
 -- Debug Draw
+
+
+function debugDrawStuff()
+    debugDrawMinefield()
+    io.write("\n")
+    debugDrawNeighbours()
+    io.write("\n")
+    debugDrawRevealed()
+end
 
 
 function debugDrawMinefield()

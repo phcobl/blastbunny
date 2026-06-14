@@ -1,8 +1,12 @@
+map_generated = false
+
+
 function love.load()
     Object = require "classic"
     require "game"
     require "tile"
     require "visual"
+    require "input"
 
     local subTitles = {
         "Waffles?",
@@ -19,10 +23,6 @@ function love.load()
     }
     local randi = love.math.random(1, #subTitles)
     love.window.setTitle("Blastbunny: " .. subTitles[randi])
-
-
-    --generateMap(10, 10, 10, {1,1})
-    --revealTile({1,1})
 
     gameInit(10, 10, 10)
     visualInit()
