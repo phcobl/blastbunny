@@ -22,7 +22,7 @@ function love.mousereleased(x, y, button, istouch)
             if selectedTile then
                 if not selectedTile.isRevealed then
                     revealTile(selectedTileCoords)
-                    print("Revealing: ", selectedTileCoords[1],":" , selectedTileCoords[2])
+                    --print("Revealing: ", selectedTileCoords[1],":" , selectedTileCoords[2])
                 else
                     print("Tile ", selectedTileCoords[1],":" , selectedTileCoords[2], " is already revealed.")
                 end

@@ -25,6 +25,9 @@ function visualDraw()
 end
 
 function canvasDraw()
+    if not map then
+        return
+    end
     love.graphics.setCanvas(canvas)
         love.graphics.clear(0, 0, 0)
         for x = 1, game_sizex do
@@ -35,7 +38,7 @@ function canvasDraw()
                     if currentTile.hasMine then
                         love.graphics.draw(decalImage, decalFrames[10], x*tileSize-tileSize, y*tileSize-tileSize)
                     elseif currentTile.minedNeighbours > 0 then
-                        love.graphics.draw(decalImage, decalFrames[current_tile.minedNeighbours], x*tileSize-tileSize, y*tileSize-tileSize)
+                        love.graphics.draw(decalImage, decalFrames[currentTile.minedNeighbours], x*tileSize-tileSize, y*tileSize-tileSize)
                     end
                 else
                     love.graphics.draw(tileImage, tileFrames.normal, x*tileSize-tileSize, y*tileSize-tileSize)

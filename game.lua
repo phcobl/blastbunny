@@ -17,7 +17,7 @@ function generateMap(startTileCoords)
         map[x] = {}
         for y = 1, game_sizey do
             --print("Creating new tile at: ", x, ", ", y)
-            map[x][y] = Tile({x, y}, false)
+            map[x][y] = Tile()
         end
     end
 
@@ -90,6 +90,7 @@ function revealTile(coord)
             end
         end
     end
+    canvasDraw()
 end
 
 
