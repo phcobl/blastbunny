@@ -20,9 +20,11 @@ function visualInit()
     visual_pixelScale = 2
 end
 
+
 function visualDraw()
     love.graphics.draw(canvas, 0, 0, 0, visual_pixelScale, visual_pixelScale)
 end
+
 
 function canvasDraw()
     if not map then
@@ -42,11 +44,15 @@ function canvasDraw()
                     end
                 else
                     love.graphics.draw(tileImage, tileFrames.normal, x*tileSize-tileSize, y*tileSize-tileSize)
+                    if map[x][y].isFlagged then
+                        love.graphics.draw(decalImage, decalFrames[9], x*tileSize-tileSize, y*tileSize-tileSize)
+                    end
                 end
             end
         end
     love.graphics.setCanvas()
 end
+
 
 function canvasReset()
     love.graphics.setCanvas(canvas)

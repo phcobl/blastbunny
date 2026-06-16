@@ -94,6 +94,16 @@ function revealTile(coord)
 end
 
 
+function toggleFlag(coord)
+    local tile = map[coord[1]][coord[2]]
+    if tile.isRevealed then
+        return
+    end
+    tile.isFlagged = not tile.isFlagged
+    canvasDraw()
+end
+
+
 function getNeighbourCoords(coord)
     local neighbours = {}
     for x = -1, 1 do

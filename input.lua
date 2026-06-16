@@ -31,7 +31,7 @@ function love.mousereleased(x, y, button, istouch)
             -- TODO: figure out how to place flags
             if selectedTile then
                 if not selectedTile.isRevealed then
-                    selectedTile.isFlagged = not selectedTile.isFlagged
+                    toggleFlag(selectedTileCoords)
                     print("Pos ", selectedTileCoords[1],":" , selectedTileCoords[2], " flagged: ", selectedTile.isFlagged)                   
                 else
                     print("Can't place a flag on a revaled tile.")
