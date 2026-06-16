@@ -1,5 +1,12 @@
+-- Map generation helpers
 solveAttempts = 0
 maxSolveAttempts = 50
+
+--
+-- 0 = game in progress
+-- 1 = game won
+-- 2 = fuck you, you lose
+winState = 0
 
 
 function gameInit(x, y, m)
@@ -90,6 +97,7 @@ function revealTile(coord)
             end
         end
     end
+    isWin()
     canvasDraw()
 end
 
@@ -130,6 +138,21 @@ end
 -- Maybe useful for is_map_solveable
 function isTileSolveable(tileCoords)
     local neighbours = getNeighbourCoords(tileCoords)
+end
+
+
+-- Returns true if the game has been won (All non-mined tiles revealed)
+function isWin()
+    for x = 1, #map do
+        for y = 1, #map[1] do
+            local tile = map[x][y]
+            if not tile.isRevealed and not tile.hasMine then
+                return false
+            end
+        end
+    end
+    print("You win!")
+    return true
 end
 
 
