@@ -18,6 +18,7 @@ function visualInit()
     canvas:setFilter("linear", "nearest")
 
     visual_pixelScale = 2
+    --love.window.setMode(400*visual_pixelScale, 240*visual_pixelScale)
 end
 
 
