@@ -30,7 +30,7 @@ function love.load()
         "Get that knight grip on your shovel",
         "Sweep sweep sweep sweep~!",
         "I can't talk right now, I'm sweeping mines.",
-        "It's literally pseudo-random, you'll figure it out",
+        "I gotta believe!",
         "I'm literally a mine, what's your excuse?",
         "19 DOLLAR MINEFIELD PLOT. Who wants it? I'm giving it away.",
         "You like sweeping mines don't you?",

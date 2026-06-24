@@ -1,0 +1,40 @@
+- come up with sane way to store global variables?
+    (we can't store variables that are used in all parts of the game wherever we want)
+- code refactor to use functional-style programming?
+    creating and changing globals willy-nilly in code feels yucky
+
+---
+
+- [] game states for scene transitions and game logic
+- [] resolution switching and defaults
+- [] pixel size system (for future lovepotion compat)
+- [] game layout
+- [] menu
+- [] animations
+- [] particles
+- [] prettify
+
+### Highscore system
+- [] store game stats
+- [] view stats
+
+### Buddy system
+- [] avatar images
+- [] reaction system
+- [] dialog entries
+- [] visuals
+- [] buddy jokers (squeakross)
+
+### Addon system
+- [] buddy pack spec
+- [] asset replacement
+- [] addon browser
+
+### Input system
+- [] action sets
+    use 
+- [] button rebinding
+
+### Audio system
+- [] sfx
+- [] bgm
