@@ -1,4 +1,4 @@
-map_generated = false
+MapGenerated = false
 
 
 function love.load()
@@ -38,15 +38,15 @@ function love.load()
     local randi = love.math.random(1, #subTitles)
     love.window.setTitle("Blastbunny: " .. subTitles[randi])
 
-    gameInit(10, 10, 10)
-    visualInit()
-    canvasReset()
+    GameInit(10, 10, 10)
+    VisualInit()
+    CanvasReset()
 end
 
 
 function love.draw()
     local start = love.timer.getTime()
-    visualDraw()
+    VisualDraw()
     local result = love.timer.getTime() - start
     love.graphics.print(string.format("%.3f ms", result * 1000), 0, 300)
 end
