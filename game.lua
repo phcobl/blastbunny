@@ -1,6 +1,7 @@
 -- Map generation helpers
 SolveAttempts = 0
 MaxSolveAttempts = 50
+MapGenerated = false
 
 --
 -- 0 = game in progress
@@ -66,10 +67,22 @@ function GenerateMap(startTileCoords)
         print("This shit is too hard for me to solve. Maybe choose different generation parameters?")
         return
     end
+    SolveAttempts = 0
 
     -- step 4: reveal first tile
     RevealTile(startTileCoords)
     --debugDrawStuff()
+end
+
+
+function RestartGame(sizeX, sizeY, mineCount)
+    Map = {}
+    WinState = 0
+    MapGenerated = false
+
+    GameInit(sizeX, sizeY, mineCount)
+    VisualInit()
+    CanvasReset()
 end
 
 

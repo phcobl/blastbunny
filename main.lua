@@ -38,9 +38,7 @@ function love.load()
     local randi = love.math.random(1, #subTitles)
     love.window.setTitle("Blastbunny: " .. subTitles[randi])
 
-    GameInit(10, 10, 10)
-    VisualInit()
-    CanvasReset()
+    RestartGame(10, 10, 10)
 end
 
 

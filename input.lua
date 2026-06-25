@@ -19,25 +19,33 @@ function love.mousereleased(x, y, button, istouch)
     if button == LastButton then
         LastButton = -1
         if button == 1 then
-            if selectedTile then
-                if not selectedTile.isRevealed then
-                    RevealTile(selectedTileCoords)
+            if SelectedTile then
+                if not SelectedTile.isRevealed then
+                    RevealTile(SelectedTileCoords)
                     --print("Revealing: ", selectedTileCoords[1],":" , selectedTileCoords[2])
                 else
-                    print("Tile ", selectedTileCoords[1],":" , selectedTileCoords[2], " is already revealed.")
+                    --print("Tile ", selectedTileCoords[1],":" , selectedTileCoords[2], " is already revealed.")
                 end
             end
         elseif button == 2 then
             -- TODO: figure out how to place flags
-            if selectedTile then
-                if not selectedTile.isRevealed then
-                    ToggleFlag(selectedTileCoords)
-                    print("Pos ", selectedTileCoords[1],":" , selectedTileCoords[2], " flagged: ", selectedTile.isFlagged)                   
+            if SelectedTile then
+                if not SelectedTile.isRevealed then
+                    ToggleFlag(SelectedTileCoords)
+                    --print("Pos ", selectedTileCoords[1],":" , selectedTileCoords[2], " flagged: ", selectedTile.isFlagged)                   
                 else
-                    print("Can't place a flag on a revaled tile.")
+                    --print("Can't place a flag on a revaled tile.")
                 end
             end
         end
+    end
+end
+
+
+-- Restart game on return key. For debugging
+function love.keyreleased(key)
+    if key == "backspace" then
+        RestartGame(12, 12, 12)
     end
 end
 
@@ -49,7 +57,7 @@ function SelectTile(x, y)
             MapGenerated = true
         end
         -- TODO: I don't like this being two separate vars :(
-        selectedTile = Map[x][y]
-        selectedTileCoords = {x, y}
+        SelectedTile = Map[x][y]
+        SelectedTileCoords = {x, y}
     end
 end
