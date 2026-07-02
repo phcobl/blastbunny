@@ -1,6 +1,3 @@
-MapGenerated = false
-
-
 function love.load()
     Object = require "classic"
     require "game"
@@ -8,7 +5,7 @@ function love.load()
     require "visual"
     require "input"
 
-    local subTitles = {
+    local splashes = {
         "Waffles?",
         "uwu",
         "Boykisser was here",
@@ -35,16 +32,16 @@ function love.load()
         "19 DOLLAR MINEFIELD PLOT. Who wants it? I'm giving it away.",
         "You like sweeping mines don't you?",
     }
-    local randi = love.math.random(1, #subTitles)
-    love.window.setTitle("Blastbunny: " .. subTitles[randi])
+    local randi = love.math.random(1, #splashes)
+    love.window.setTitle("Blastbunny: " .. splashes[randi])
 
-    RestartGame(10, 10, 10)
+    restartGame(10, 10, 10)
 end
 
 
 function love.draw()
     local start = love.timer.getTime()
-    VisualDraw()
+    visualDraw()
     local result = love.timer.getTime() - start
     love.graphics.print(string.format("%.3f ms", result * 1000), 0, 300)
 end

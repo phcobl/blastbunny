@@ -1,29 +1,29 @@
 -- Map generation helpers
-SolveAttempts = 0
-MaxSolveAttempts = 50
-MapGenerated = false
+Solve_Attempts = 0
+Max_Solve_Attempts = 50
+Map_Generated = false
 
---
+
 -- 0 = game in progress
 -- 1 = game won
 -- 2 = fuck you, you lose
-WinState = 0
+Win_State = 0
 
 
-function GameInit(x, y, m)
-    GameSizeX = x
-    GameSizeY = y
-    GameMines = m
+function gameInit(x, y, m)
+    Game_Size_X = x
+    Game_Size_Y = y
+    Game_Mines = m
     --game_state = "init"
 end
 
 
-function GenerateMap(startTileCoords)
+function generateMap(start_tile_coords)
     -- step 1: generate field
     Map = {}
-    for x = 1, GameSizeX do
+    for x = 1, Game_Size_X do
         Map[x] = {}
-        for y = 1, GameSizeY do
+        for y = 1, Game_Size_Y do
             --print("Creating new tile at: ", x, ", ", y)
             Map[x][y] = Tile()
         end
@@ -34,98 +34,98 @@ function GenerateMap(startTileCoords)
     local i = 0
     --print("max fields: ", game_sizex * game_sizey)
     --print("max attempts: ", game_sizex * game_sizey * 10)
-    while i < GameMines do
-        if attempt < GameSizeX * GameSizeY * 10 then
-            local rx = love.math.random(1, GameSizeX)
-            local ry = love.math.random(1, GameSizeY)
+    while i < Game_Mines do
+        if attempt < Game_Size_X * Game_Size_Y * 10 then
+            local rx = love.math.random(1, Game_Size_X)
+            local ry = love.math.random(1, Game_Size_Y)
             local tile = Map[rx][ry]
             --print("Generating Mine #", i, ". Attempt #", attempt)
-            if tile.hasMine or (rx == startTileCoords[1] and ry == startTileCoords[2]) then
+            if tile.has_mine or (rx == start_tile_coords[1] and ry == start_tile_coords[2]) then
                 attempt = attempt + 1
                 --print("new attempt")
             else
-                tile.hasMine = true
-                AddMineToNeighbours({rx, ry})
+                tile.has_mine = true
+                addMineToNeighbours({rx, ry})
                 i = i + 1
             end
         else
             print("I tried so hard and got so far. But in the end I fucked up the minefield generator. ~Freddy")
-            i = GameMines
+            i = Game_Mines
         end
     end
     
     -- step 3: check if map can be solved
     -- Not working yet, implement isMapSolveable to get it working
-    if SolveAttempts < MaxSolveAttempts then
-        if not IsMapSolveable(startTileCoords) then
-            SolveAttempts = SolveAttempts + 1
+    if Solve_Attempts < Max_Solve_Attempts then
+        if not isMapSolveable(start_tile_coords) then
+            Solve_Attempts = Solve_Attempts + 1
             print("Can't solve map. Trying again.")
-            GenerateMap(startTileCoords)
+            generateMap(start_tile_coords)
             return
         end
     else
         print("This shit is too hard for me to solve. Maybe choose different generation parameters?")
         return
     end
-    SolveAttempts = 0
+    Solve_Attempts = 0
 
     -- step 4: reveal first tile
-    RevealTile(startTileCoords)
+    revealTile(start_tile_coords)
     --debugDrawStuff()
 end
 
 
-function RestartGame(sizeX, sizeY, mineCount)
+function restartGame(size_x, size_y, mine_count)
     Map = {}
-    WinState = 0
-    MapGenerated = false
+    Win_State = 0
+    Map_Generated = false
 
-    GameInit(sizeX, sizeY, mineCount)
-    VisualInit()
-    CanvasReset()
+    gameInit(size_x, size_y, mine_count)
+    visualInit()
+    canvasReset()
 end
 
 
-function AddMineToNeighbours(mineCoord)
-    local neighbourCoordsArray = GetNeighbourCoords(mineCoord)
-    for i = 1, #neighbourCoordsArray do
-        local neighbourTile = Map[neighbourCoordsArray[i][1]][neighbourCoordsArray[i][2]]
-        neighbourTile.minedNeighbours = neighbourTile.minedNeighbours + 1
+function addMineToNeighbours(mine_coord)
+    local neighbour_coords_array = getNeighbourCoords(mine_coord)
+    for i = 1, #neighbour_coords_array do
+        local neighbour_tile = Map[neighbour_coords_array[i][1]][neighbour_coords_array[i][2]]
+        neighbour_tile.mined_neighbours = neighbour_tile.mined_neighbours + 1
     end
 end
 
 
-function RevealTile(coord)
+function revealTile(coord)
     local tile = Map[coord[1]][coord[2]]
-    tile.isRevealed = true
+    tile.is_revealed = true
 
-    if tile.minedNeighbours == 0 then
-        local neighbourCoordsArray = GetNeighbourCoords({coord[1], coord[2]})
-        for i = 1, #neighbourCoordsArray do
-            local neighbourTile = Map[neighbourCoordsArray[i][1]][neighbourCoordsArray[i][2]]
-            if neighbourTile.hasMine == false then
-                if neighbourTile.isRevealed == false then
-                    RevealTile({neighbourCoordsArray[i][1], neighbourCoordsArray[i][2]})
+    if tile.mined_neighbours == 0 then
+        local neighbour_coords_array = getNeighbourCoords({coord[1], coord[2]})
+        for i = 1, #neighbour_coords_array do
+            local neighbour_tile = Map[neighbour_coords_array[i][1]][neighbour_coords_array[i][2]]
+            if neighbour_tile.has_mine == false then
+                if neighbour_tile.is_revealed == false then
+                    revealTile({neighbour_coords_array[i][1], neighbour_coords_array[i][2]})
                 end
             end
         end
     end
-    IsWin()
-    CanvasDraw()
+    isWin()
+    canvasDraw()
 end
 
 
-function ToggleFlag(coord)
+function toggleFlag(coord)
     local tile = Map[coord[1]][coord[2]]
-    if tile.isRevealed then
+    if tile.is_revealed then
         return
     end
-    tile.isFlagged = not tile.isFlagged
-    CanvasDraw()
+    tile.is_flagged = not tile.is_flagged
+    canvasDraw()
 end
 
 
-function GetNeighbourCoords(coord)
+function getNeighbourCoords(coord)
     local neighbours = {}
     for x = -1, 1 do
         for y = -1, 1 do
@@ -143,23 +143,23 @@ end
 
 
 -- Unused. Implement this later maybe.
-function IsMapSolveable(startCoord)
+function isMapSolveable(start_coord)
     return true
 end
 
 
 -- Maybe useful for is_map_solveable
-function IsTileSolveable(tileCoords)
-    local neighbours = GetNeighbourCoords(tileCoords)
+function IsTileSolveable(tile_coords)
+    local neighbours = getNeighbourCoords(tile_coords)
 end
 
 
 -- Returns true if the game has been won (All non-mined tiles revealed)
-function IsWin()
+function isWin()
     for x = 1, #Map do
         for y = 1, #Map[1] do
             local tile = Map[x][y]
-            if not tile.isRevealed and not tile.hasMine then
+            if not tile.is_revealed and not tile.has_mine then
                 return false
             end
         end
@@ -172,19 +172,19 @@ end
 -- Debug Draw
 
 
-function DebugDrawStuff()
-    DebugDrawMinefield()
+function debugDrawStuff()
+    debugDrawMinefield()
     io.write("\n")
-    DebugDrawNeighbours()
+    debugDrawNeighbours()
     io.write("\n")
-    DebugDrawRevealed()
+    debugDrawRevealed()
 end
 
 
-function DebugDrawMinefield()
+function debugDrawMinefield()
     for x = 1, #Map do
         for y = 1, #Map[1] do
-            if Map[x][y].hasMine then
+            if Map[x][y].has_mine then
                 io.write(" X ")
             else
                 io.write(" O ")
@@ -195,13 +195,13 @@ function DebugDrawMinefield()
 end
 
 
-function DebugDrawNeighbours()
+function debugDrawNeighbours()
     for x = 1, #Map do
         for y = 1, #Map[1] do
-            if Map[x][y].hasMine then
+            if Map[x][y].has_mine then
                 io.write(" X ")
             else
-                io.write(" ", Map[x][y].minedNeighbours , " ")
+                io.write(" ", Map[x][y].mined_neighbours , " ")
             end
         end
         io.write("\n")
@@ -210,11 +210,11 @@ function DebugDrawNeighbours()
 end
 
 
-function DebugDrawRevealed()
+function debugDrawRevealed()
     for x = 1, #Map do
         for y = 1, #Map[1] do
-            local neighbours = Map[x][y].minedNeighbours
-            if Map[x][y].isRevealed then
+            local neighbours = Map[x][y].mined_neighbours
+            if Map[x][y].is_revealed then
                 io.write(" ", neighbours," ")
             else
                 io.write(" - ")

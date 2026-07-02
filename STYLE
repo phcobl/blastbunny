@@ -1,0 +1,45 @@
+# Coding style guidelines
+
+## Naming
+
+GLOBAL_CONSTANT
+Global_Variable
+local_variable
+functionName
+ClassName
+
+long_x
+long_y
+lx
+ly
+
+
+```lua
+GLOBAL_CONSTANT = 1
+Global_Variable = 2
+
+function loveYourself()
+    local CONSTANT_DETERMINATION = true
+    local is_true = false
+
+    if not is_true then
+        if CONSTANT_DETERMINATION then
+            is_true = true
+        end
+    end
+end
+
+function coolClass()
+    local class = require30log()
+
+    local CoolClass = class("CoolClass")
+    function CoolClass:init()
+        self.is_cool = true
+        self.loves_self = loveYourself()
+    end
+
+    function CoolClass:doSomething(cool)
+        return cool
+    end
+end
+```
